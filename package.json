@@ -15,11 +15,17 @@
     "axios": "^1.6.0",
     "lucide-react": "^0.294.0"
   },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && wrangler pages deploy build",
+    "deploy:staging": "npm run build && wrangler pages deploy build --env staging",
+    "preview": "wrangler pages dev build"
   },
   "eslintConfig": {
     "extends": [

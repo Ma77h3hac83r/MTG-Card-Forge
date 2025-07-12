@@ -1,4 +1,4 @@
-# MTG Card Forge
+# wra
 
 A beautiful web application for searching Magic: The Gathering cards and discovering all their available printings across different sets. Built with React, TypeScript, and the Scryfall API.
 
@@ -59,6 +59,70 @@ npm start
 ```bash
 npm run build
 ```
+
+## Deployment
+
+### Cloudflare Pages
+
+This project is configured for deployment on Cloudflare Pages.
+
+#### Prerequisites
+
+1. Install Wrangler CLI:
+```bash
+npm install -g wrangler
+```
+
+2. Login to Cloudflare:
+```bash
+wrangler login
+```
+
+#### Deploy to Production
+
+```bash
+npm run deploy
+```
+
+#### Deploy to Staging
+
+```bash
+npm run deploy:staging
+```
+
+#### Preview Locally
+
+```bash
+npm run preview
+```
+
+#### Manual Deployment
+
+1. Build the project:
+```bash
+npm run build
+```
+
+2. Deploy using Wrangler:
+```bash
+wrangler pages deploy build
+```
+
+#### Environment Variables
+
+If you need to set environment variables for your deployment:
+
+1. Go to your Cloudflare Pages dashboard
+2. Navigate to Settings > Environment variables
+3. Add any required environment variables
+
+#### Custom Domain
+
+To set up a custom domain:
+
+1. Go to your Cloudflare Pages dashboard
+2. Navigate to Custom domains
+3. Add your domain and follow the DNS configuration instructions
 
 ## Usage
 
