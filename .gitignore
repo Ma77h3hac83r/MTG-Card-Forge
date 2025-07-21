@@ -220,3 +220,7 @@ performance.log
 next-env.d.ts
 
 /READMEs
+.eslintrc.js
+lighthouse-report.json
+deploy.bat
+deploy.sh
