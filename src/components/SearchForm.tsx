@@ -108,8 +108,8 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onBulkSearch, isLoadi
       const rect = inputRef.current.getBoundingClientRect();
       setDropdownStyle({
         position: 'absolute',
-        top: `${rect.bottom + window.scrollY + 4}px`,
-        left: `${rect.left + window.scrollX}px`,
+        top: `${rect.bottom + 4}px`,
+        left: `${rect.left}px`,
         width: `${rect.width}px`,
         background: 'var(--bg-secondary)',
         border: '1px solid var(--border-color)',
@@ -120,7 +120,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, onBulkSearch, isLoadi
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
       });
     }
-  }, [showAutocomplete, autocompleteOptions, inputRef.current, window.scrollY, window.scrollX]);
+  }, [showAutocomplete, autocompleteOptions]);
 
   const handleBulkSearch = (e: React.FormEvent) => {
     e.preventDefault();

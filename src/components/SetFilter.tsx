@@ -46,9 +46,7 @@ const BORDER_OPTIONS = [
   { value: '', label: 'All Borders' },
   { value: 'black', label: 'Black' },
   { value: 'white', label: 'White' },
-  { value: 'gold', label: 'Gold' },
-  { value: 'silver', label: 'Silver' },
-  { value: 'borderless', label: 'Borderless' },
+  { value: 'borderless', label: 'Full Art' },
 ];
 
 const FOIL_OPTIONS = [
@@ -77,10 +75,6 @@ const SetFilter: React.FC<SetFilterProps> = ({
   onBulkCardChange,
   filteredResults
 }) => {
-  const allEnabled = filters.every(f => f.enabled);
-  const someEnabled = filters.some(f => f.enabled);
-
-  // Calculate which categories have cards in the current search results
   const categoriesWithCards = new Set<string>();
   searchResults.forEach(result => {
     result.sets.forEach(set => {
@@ -96,7 +90,7 @@ const SetFilter: React.FC<SetFilterProps> = ({
   });
 
   return (
-    <div className="card" style={{ marginBottom: '24px', position: 'relative', zIndex: 1 }}>
+    <div style={{ position: 'relative', zIndex: 1 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
         <Filter size={20} />
         <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>Filters & Options</h3>
@@ -104,10 +98,10 @@ const SetFilter: React.FC<SetFilterProps> = ({
 
       {/* First Row: Set Types Filter (all 8 in 1 row) */}
       <div style={{ marginBottom: '20px' }}>
-        <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)', fontSize: '1rem' }}>Set Types</h4>
-        <div style={{
+        <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)', fontSize: '1rem' }}><b>Set Types</b></h4>
+        <div className="set-types-grid" style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(8, 1fr)',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
           gap: '12px',
           alignItems: 'center',
         }}>
@@ -146,9 +140,16 @@ const SetFilter: React.FC<SetFilterProps> = ({
         </div>
       </div>
 
+      {/* Dividing Line */}
+      <div style={{
+        height: '1px',
+        background: 'var(--border-color)',
+        margin: '8px 0',
+      }} />
+
       {/* Second Row: Frame and Border selection (as checkboxes) */}
       <div style={{ marginBottom: '20px' }}>
-        <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)', fontSize: '1rem' }}>Frame & Border</h4>
+        <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)', fontSize: '1rem' }}><b>Frames, Borders, and Foils</b></h4>
         <div style={{
           display: 'flex',
           flexDirection: 'column',
@@ -275,9 +276,16 @@ const SetFilter: React.FC<SetFilterProps> = ({
         </div>
       </div>
 
+      {/* Dividing Line */}
+      <div style={{
+        height: '1px',
+        background: 'var(--border-color)',
+        margin: '8px 0',
+      }} />
+
       {/* Third Row: Show card images */}
       <div style={{ marginBottom: '20px' }}>
-        <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)', fontSize: '1rem' }}>Display Options</h4>
+        <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)', fontSize: '1rem' }}><b>Display Options</b></h4>
         <div>
           <label htmlFor="toggle-images" style={{ color: 'var(--text-primary)', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
             <input
@@ -292,8 +300,15 @@ const SetFilter: React.FC<SetFilterProps> = ({
         </div>
       </div>
 
+      {/* Dividing Line */}
+        <div style={{
+          height: '1px',
+    background: 'var(--md-outline-variant)',
+    margin: '8px 0',
+  }} />
+
       {/* Fourth Row: Sort Cards and Select Card */}
-      <div style={{
+      <div className="sort-bulk-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         gap: '16px',

@@ -120,6 +120,18 @@ public
 *.swo
 *~
 
+# Editor config files
+.editorconfig
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
 # OS generated files
 .DS_Store
 .DS_Store?
@@ -152,8 +164,20 @@ temp/
 public/sw.js
 public/workbox-*.js
 
+# React build artifacts
+build/
+static/
+
+# React development
+.env.development
+.env.production
+
 # Testing
 /coverage
+.jest/
+test-results/
+playwright-report/
+test-results.xml
 
 # Production
 /build
@@ -170,6 +194,17 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Performance and monitoring
+*.perf
+*.profile
+performance.log
+
+# Cache directories
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
 # Local env files
 .env*.local
 
@@ -183,3 +218,5 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+/READMEs

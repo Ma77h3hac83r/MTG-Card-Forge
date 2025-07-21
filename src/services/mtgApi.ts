@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { MTGCard, SearchResult, MTGSet } from '../types';
-import { categorizeSetByType, categorizeSetCode } from '../data/setCategories';
+import { categorizeSetByType } from '../data/setCategories';
 
 const API_BASE_URL = 'https://api.scryfall.com';
 
@@ -49,9 +49,10 @@ class MTGApiService {
       const enhancedCards = await Promise.all(
         paperCards.map(async (card) => {
           // If it's a planeswalker, saga, or dual-sided card, get the detailed card info
-          if (card.type_line && (card.type_line.toLowerCase().includes('planeswalker') || 
+          if (card.type_line && 
+            ((card.type_line.toLowerCase().includes('planeswalker') || 
               card.type_line.toLowerCase().includes('saga')) ||
-              card.layout === 'transform') {
+             card.layout === 'transform')) {
             try {
               const detailedCard = await this.getCardByExactName(card.name);
               return {
@@ -141,6 +142,23 @@ class MTGApiService {
     }
 
     return cheapest;
+  }
+
+  getMostRecentPrinting(cards: MTGCard[]): MTGCard {
+    let mostRecent = cards[0];
+    let latestDate = new Date(0); // Start with earliest possible date
+
+    for (const card of cards) {
+      if (card.released_at) {
+        const cardDate = new Date(card.released_at);
+        if (cardDate > latestDate) {
+          latestDate = cardDate;
+          mostRecent = card;
+        }
+      }
+    }
+
+    return mostRecent;
   }
 
   private getCardPrice(card: MTGCard): number {

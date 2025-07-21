@@ -18,6 +18,7 @@ export interface MTGCard {
   released_at?: string;
   frame?: string;
   border_color?: string;
+  full_art?: boolean;
   tcgplayer_id?: number;
   games?: string[];
   layout?: string;
