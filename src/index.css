@@ -613,7 +613,6 @@ form {
   justify-content: center !important;
   align-items: center !important;
   width: 100% !important;
-  padding: 8px !important;
 }
 
 .card-image {
@@ -621,17 +620,17 @@ form {
   max-width: 100% !important;
   height: auto !important;
   max-height: 350px !important;
-  object-fit: contain !important;
-  border-radius: 4px !important;
+  object-fit: cover !important;
+  border-radius: 12px !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 .image-placeholder {
   width: 100% !important;
   height: 350px !important;
-  background: var(--md-surface-container) !important;
+  background: var(--bg-secondary) !important;
   border: 1px solid var(--md-outline-variant) !important;
-  border-radius: 4px !important;
+  border-radius: 12px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -694,6 +693,7 @@ form {
   .card-image-placeholder {
     width: 160px !important;
     height: 224px !important;
+    border-radius: 12px !important;
   }
 }
 
@@ -702,6 +702,7 @@ form {
   .card-image-placeholder {
     width: 200px !important;
     height: 280px !important;
+    border-radius: 12px !important;
   }
 }
 
@@ -710,6 +711,7 @@ form {
   .card-image-placeholder {
     width: 240px !important;
     height: 336px !important;
+    border-radius: 16px !important;
   }
 }
 
@@ -918,11 +920,13 @@ form {
   .dual-card-images img {
     width: 140px !important;
     height: 196px !important;
+    border-radius: 12px !important;
   }
   
   .dual-card-images .card-image-placeholder {
     width: 140px !important;
     height: 196px !important;
+    border-radius: 12px !important;
   }
 }
 
@@ -930,11 +934,13 @@ form {
   .dual-card-images img {
     width: 150px !important;
     height: 210px !important;
+    border-radius: 12px !important;
   }
   
   .dual-card-images .card-image-placeholder {
     width: 150px !important;
     height: 210px !important;
+    border-radius: 12px !important;
   }
 }
 
@@ -942,11 +948,13 @@ form {
   .dual-card-images img {
     width: 160px !important;
     height: 224px !important;
+    border-radius: 12px !important;
   }
   
   .dual-card-images .card-image-placeholder {
     width: 160px !important;
     height: 224px !important;
+    border-radius: 12px !important;
   }
 }
 
@@ -954,11 +962,13 @@ form {
   .dual-card-images img {
     width: 200px !important;
     height: 280px !important;
+    border-radius: 16px !important;
   }
   
   .dual-card-images .card-image-placeholder {
     width: 200px !important;
     height: 280px !important;
+    border-radius: 16px !important;
   }
 }
 

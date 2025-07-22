@@ -30,6 +30,26 @@ class MTGApiService {
     }
   }
 
+  async searchCardsBySetCode(setCode: string): Promise<MTGCard[]> {
+    try {
+      const response = await this.api.get<SearchResult>(`/cards/search`, {
+        params: {
+          q: `set:${setCode}`,
+          unique: 'prints',
+          order: 'name',
+        },
+      });
+      
+      // Filter out cards that are not available in paper
+      return response.data.data.filter(card => 
+        card.games && card.games.includes('paper')
+      );
+    } catch (error) {
+      console.error('Error searching cards by set:', error);
+      throw new Error('Failed to search cards by set');
+    }
+  }
+
   async getCardByName(name: string): Promise<MTGCard[]> {
     try {
       const response = await this.api.get<SearchResult>(`/cards/search`, {
@@ -102,15 +122,111 @@ class MTGApiService {
     }
   }
 
+  async searchSets(query: string): Promise<MTGSet[]> {
+    try {
+      const response = await this.api.get<{ data: MTGSet[] }>('/sets');
+      const allSets = response.data.data;
+      
+      // Filter sets based on query (code or name)
+      const filteredSets = allSets.filter(set => 
+        set.code.toLowerCase().includes(query.toLowerCase()) ||
+        set.name.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      // Sort by relevance (exact matches first, then partial matches)
+      return filteredSets.sort((a, b) => {
+        const aCodeMatch = a.code.toLowerCase() === query.toLowerCase();
+        const bCodeMatch = b.code.toLowerCase() === query.toLowerCase();
+        const aNameMatch = a.name.toLowerCase() === query.toLowerCase();
+        const bNameMatch = b.name.toLowerCase() === query.toLowerCase();
+        
+        if (aCodeMatch && !bCodeMatch) return -1;
+        if (!aCodeMatch && bCodeMatch) return 1;
+        if (aNameMatch && !bNameMatch) return -1;
+        if (!aNameMatch && bNameMatch) return 1;
+        
+        return a.name.localeCompare(b.name);
+      });
+    } catch (error) {
+      console.error('Error searching sets:', error);
+      throw new Error('Failed to search sets');
+    }
+  }
+
+  async getRelatedSets(mainSetCode: string): Promise<MTGSet[]> {
+    try {
+      const response = await this.api.get<{ data: MTGSet[] }>('/sets');
+      const allSets = response.data.data;
+      
+      // Get the main set
+      const mainSet = allSets.find(set => set.code.toLowerCase() === mainSetCode.toLowerCase());
+      if (!mainSet) return [];
+
+      const relatedSets: MTGSet[] = [mainSet];
+      
+      // Find related sets based on common patterns
+      const baseCode = mainSetCode.toLowerCase();
+      const setName = mainSet.name.toLowerCase();
+      
+      // Look for commander sets (usually end with 'c' or contain 'commander')
+      const commanderSets = allSets.filter(set => {
+        const setCode = set.code.toLowerCase();
+        const setType = set.set_type?.toLowerCase();
+        const setTypeName = set.name.toLowerCase();
+        
+        return (
+          // Commander sets often have 'c' suffix or contain 'commander' in name
+          (setCode.startsWith(baseCode) && setCode.endsWith('c')) ||
+          (setTypeName.includes('commander') && 
+           (setTypeName.includes(setName.replace(':', '').replace(' ', '')) ||
+            setTypeName.includes(baseCode))) ||
+          // Check for set type being commander and related to main set
+          (setType === 'commander' && 
+           (setTypeName.includes(setName.replace(':', '').replace(' ', '')) ||
+            setTypeName.includes(baseCode)))
+        );
+      });
+      
+      // Look for supplemental sets (draft boosters, collector boosters, etc.)
+      const supplementalSets = allSets.filter(set => {
+        const setCode = set.code.toLowerCase();
+        const setType = set.set_type?.toLowerCase();
+        const setTypeName = set.name.toLowerCase();
+        
+        return (
+          // Same base code but different suffix
+          (setCode.startsWith(baseCode) && setCode !== baseCode && !setCode.endsWith('c')) ||
+          // Supplemental set types
+          ((setType === 'draft_innovation' || setType === 'arsenal' || setType === 'box') &&
+          (setTypeName.includes(setName.replace(':', '').replace(' ', '')) ||
+           setTypeName.includes(baseCode)))
+        );
+      });
+      
+      // Add related sets, avoiding duplicates
+      const allRelatedSets = [...commanderSets, ...supplementalSets];
+      allRelatedSets.forEach(set => {
+        if (!relatedSets.find(existing => existing.code === set.code)) {
+          relatedSets.push(set);
+        }
+      });
+      
+      return relatedSets;
+    } catch (error) {
+      console.error('Error getting related sets:', error);
+      return [];
+    }
+  }
+
   async getCardImageUrl(card: MTGCard): Promise<string> {
     // For dual-sided cards, return the front face image
-    if (card.card_faces && card.card_faces.length > 0 && card.card_faces[0].image_uris?.large) {
-      return card.card_faces[0].image_uris.large;
+    if (card.card_faces && card.card_faces.length > 0 && card.card_faces[0].image_uris?.normal) {
+      return card.card_faces[0].image_uris.normal;
     }
     
-    // For single-sided cards, return the large image
-    if (card.image_uris?.large) {
-      return card.image_uris.large;
+    // For single-sided cards, return the normal image
+    if (card.image_uris?.normal) {
+      return card.image_uris.normal;
     }
     
     // Fallback to card name search for image
@@ -118,12 +234,12 @@ class MTGApiService {
       const exactCard = await this.getCardByExactName(card.name);
       
       // Check for dual-sided card in the detailed response
-      if (exactCard.card_faces && exactCard.card_faces.length > 0 && exactCard.card_faces[0].image_uris?.large) {
-        return exactCard.card_faces[0].image_uris.large;
+      if (exactCard.card_faces && exactCard.card_faces.length > 0 && exactCard.card_faces[0].image_uris?.normal) {
+        return exactCard.card_faces[0].image_uris.normal;
       }
       
-      // Return large image from detailed response
-      return exactCard.image_uris?.large || '';
+      // Return normal image from detailed response
+      return exactCard.image_uris?.normal || '';
     } catch (error) {
       return '';
     }

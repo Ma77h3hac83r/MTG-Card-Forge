@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MTGCard } from '../types';
 import { mtgApiService } from '../services/mtgApi';
-import tcgplayerIcon from '../images/tcgplayer_icon.png';
+import tcgplayerIcon from '../images/tcgplayer_icon.svg';
 
 interface CardResultProps {
   card: MTGCard;
@@ -49,12 +49,12 @@ const CardResult: React.FC<CardResultProps> = ({
 
   // Helper function to get the image URL for a card
   const getCardImageUrl = (set: MTGCard): string | null => {
-    if (set.card_faces && set.card_faces.length > 0 && set.card_faces[0].image_uris?.large) {
-      return set.card_faces[0].image_uris.large;
+    if (set.card_faces && set.card_faces.length > 0 && set.card_faces[0].image_uris?.normal) {
+      return set.card_faces[0].image_uris.normal;
     }
     
-    if (set.image_uris?.large) {
-      return set.image_uris.large;
+    if (set.image_uris?.normal) {
+      return set.image_uris.normal;
     }
     
     return imageUrlMap[set.id] || null;
@@ -145,16 +145,17 @@ const CardResult: React.FC<CardResultProps> = ({
         <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '24px', alignItems: 'start' }}>
           {/* Card Image */}
           <div style={{ textAlign: 'center' }}>
-            {cheapestPrinting.image_uris?.large ? (
+            {cheapestPrinting.image_uris?.normal ? (
               <img
-                src={cheapestPrinting.image_uris.large}
+                src={cheapestPrinting.image_uris.normal}
                 alt={card.name}
                 style={{
                   width: '100%',
                   maxWidth: '280px',
-                  borderRadius: '12px',
+                  borderRadius: '16px',
                   boxShadow: '0 8px 25px rgba(0, 0, 0, 0.3)',
                   border: '2px solid var(--border-color)',
+                  objectFit: 'cover',
                 }}
               />
             ) : (
@@ -162,8 +163,8 @@ const CardResult: React.FC<CardResultProps> = ({
                 style={{
                   width: '280px',
                   height: '390px',
-                  background: 'var(--bg-tertiary)',
-                  borderRadius: '12px',
+                  background: 'var(--bg-secondary)',
+                  borderRadius: '16px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
